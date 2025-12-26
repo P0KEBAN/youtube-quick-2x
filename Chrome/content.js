@@ -241,11 +241,20 @@
         }
 
         // 同時押しが成立した瞬間に1回だけトグル
-        if (!state.chordConsumed && isChordPressed()) {
-            const ok = toggleSticky();
-            if (ok) {
-                state.chordConsumed = true;
-                armSuppressUIEvents(); // contextmenu/余計なクリック防止
+        // 右クリックが押された時に左が既に押されていれば、時間制限なしで発動
+        // 左クリックが押された時に右が既に押されていれば、CHORD_WINDOW_MS 以内のみ発動
+        if (!state.chordConsumed && state.leftDown && state.rightDown) {
+            const rightJustPressed = e.button === 2;
+            const withinWindow = CHORD_WINDOW_MS == null ||
+                Math.abs(state.leftDownAt - state.rightDownAt) <= CHORD_WINDOW_MS;
+
+            // 右クリック押下時は常に発動、左クリック押下時は時間制限内のみ
+            if (rightJustPressed || withinWindow) {
+                const ok = toggleSticky();
+                if (ok) {
+                    state.chordConsumed = true;
+                    armSuppressUIEvents(); // contextmenu/余計なクリック防止
+                }
             }
         }
     }

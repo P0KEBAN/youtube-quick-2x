@@ -30,6 +30,7 @@
 
         // Tracks YouTube hold-to-2x state
         tempBoostActive: false,
+        pendingRestore: false,
         globalAttached: false,
         playerObserver: null,
         refreshDebounce: null
@@ -105,6 +106,7 @@
         state.chordConsumed = false;
         state.rateBeforePress = null;
         state.tempBoostActive = false;
+        state.pendingRestore = false;
     }
 
     function refreshVideo() {
@@ -199,6 +201,7 @@
             state.previousRate = base;
             state.stickyOn = true;
 
+            state.pendingRestore = false;
             const ok = setPlaybackRateSafe(v, TARGET_RATE);
             if (!ok) {
                 state.stickyOn = false;
@@ -213,7 +216,10 @@
 
             // ボタン押下中はYouTube側と喧嘩しやすいので、両方離れてる時だけ戻す
             if (!state.leftDown && !state.rightDown) {
+                state.pendingRestore = false;
                 setPlaybackRateSafe(v, state.previousRate || 1);
+            } else {
+                state.pendingRestore = true;
             }
 
             toast("2x 固定 OFF");
@@ -250,18 +256,31 @@
 
         // Reset after both buttons released
         if (!state.leftDown && !state.rightDown) {
-            const shouldRestore = !state.stickyOn && state.tempBoostActive;
-            const restoreRate = state.rateBeforePress;
+            const shouldRestoreSticky = !state.stickyOn && state.pendingRestore;
+            const restoreRateSticky = state.previousRate;
+            const shouldRestoreTemp = !state.stickyOn && state.tempBoostActive;
+            const restoreRateTemp = state.rateBeforePress;
 
             resetPressState();
 
-            // Restore only if hold-to-2x was detected
-            if (shouldRestore) {
+            if (shouldRestoreSticky) {
                 refreshVideo();
-                if (state.video && restoreRate != null) {
+                if (state.video) {
                     const currentRate = state.video.playbackRate || 1;
                     if (Math.abs(currentRate - TARGET_RATE) < 0.0001) {
-                        setPlaybackRateSafe(state.video, restoreRate);
+                        setPlaybackRateSafe(state.video, restoreRateSticky || 1);
+                    }
+                }
+                return;
+            }
+
+            // Restore only if hold-to-2x was detected
+            if (shouldRestoreTemp) {
+                refreshVideo();
+                if (state.video && restoreRateTemp != null) {
+                    const currentRate = state.video.playbackRate || 1;
+                    if (Math.abs(currentRate - TARGET_RATE) < 0.0001) {
+                        setPlaybackRateSafe(state.video, restoreRateTemp);
                     }
                 }
             }
@@ -286,8 +305,13 @@
             refreshVideo();
             const v = state.video;
             state.stickyOn = false;
-            if (v && !state.leftDown && !state.rightDown) setPlaybackRateSafe(v, state.previousRate || 1);
-            toast("2x 固定 OFF");
+            if (state.leftDown || state.rightDown) {
+                state.pendingRestore = true;
+            } else {
+                state.pendingRestore = false;
+                if (v) setPlaybackRateSafe(v, state.previousRate || 1);
+            }
+            toast("2x \u56fa\u5b9a OFF");
         }
     }
 

@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "YouTube Sticky 2x (Left+Right Toggle)",
+    "name": "YouTube Quick 2x",
     "version": "0.2.0",
     "description": "Press left+right on the YouTube player to toggle 2x speed until pressed again.",
     "host_permissions": [

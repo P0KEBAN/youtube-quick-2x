@@ -11,7 +11,7 @@
 [![Chrome Extension](https://img.shields.io/badge/Platform-Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.5.0-EA4335?style=flat-square)](https://github.com/P0KEBAN/youtube-quick-2x/releases/latest)
+[![Version](https://img.shields.io/badge/Version-0.5.1-EA4335?style=flat-square)](https://github.com/P0KEBAN/youtube-quick-2x/releases/latest)
 
 **日本語** | [English](README.en.md)
 

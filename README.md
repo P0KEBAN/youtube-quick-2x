@@ -1,92 +1,133 @@
+<div align="center">
+
+<img src="Chrome/icons/icon128.png" alt="YouTube Quick 2x" width="128" height="128">
+
 # YouTube Quick 2x
 
-YouTube の再生速度を **2x に固定（ON/OFF トグル）**できる、超シンプルな Chrome 拡張です。  
-操作は **マウスだけで完結**：動画プレイヤー上で **左クリック + 右クリック** で切り替えます。
+**A dead-simple Chrome extension that locks YouTube playback speed to 2x (ON/OFF toggle)**
 
-> 目的：  
-> - 速度調整を段階的にいじりたくない  
-> - 「2倍速だけ」でいい  
-> - できればマウスだけで一発で切り替えたい  
-> → そのための最小構成拡張です
+Mouse-only control — toggle with **Left Click + Right Click** on the video player 🖱️
 
----
+[![Chrome Extension](https://img.shields.io/badge/Platform-Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-0.2.0-EA4335?style=flat-square)]()
 
-## Features
+**🇯🇵 [日本語版 README はこちら](README.ja.md)**
 
-- ✅ YouTube の動画上で **左+右 同時押し** → **2x 固定 ON/OFF**
-- ✅ YouTube 標準の「**左長押しで2x**」中に **右クリック** → **2x 固定 ON**
-- ✅ **Esc** で 2x 固定を解除（OFF）
-- ✅ 2x 固定 ON 中は、YouTube 側の速度変更が入っても **2x に戻します**
-- ✅ 余計な **右クリックメニュー（context menu）** や誤クリックを抑止
+</div>
 
 ---
 
-## How to Use
-
-YouTube の動画プレイヤー上で：
-
-| 操作 | 動作 |
-|------|------|
-| **左+右 同時押し** | 2x 固定 **ON / OFF** |
-| **左を長押し中** → **右クリック** | 2x 固定 **ON** |
-| **Esc** | 2x 固定 **OFF** |
-
-### ポイント
-- YouTube標準の「左長押しで一時的に2倍速」機能はそのまま使えます
-- 長押し中に「このまま2倍速を維持したい」と思ったら、右クリックするだけでOK
-- 同時押しでも発動するので、素早く2倍速にしたい時は両方同時に押せばOK
+> 💡 **Who is this for?**
+> - You don't want to fiddle with speed controls step by step
+> - **2x is all you need**
+> - You want to toggle it with **just your mouse**
+>
+> → A minimal extension built for exactly that
 
 ---
 
-## Install (Developer Mode)
+## ✨ Features
 
-Chrome の「デベロッパーモード」で読み込む方式です。
-
-1. このリポジトリをダウンロード or clone
-2. Chrome で `chrome://extensions/` を開く
-3. 右上の **デベロッパーモード** を ON
-4. **「パッケージ化されていない拡張機能を読み込む」** を押す
-5. `Chrome` フォルダ（`manifest.json` がある場所）を選択
+| | Description |
+|:--:|:--|
+| 🖱️ | **Left + Right click** on the video → **2x lock ON/OFF** |
+| ▶️ | During YouTube's native **"hold left to 2x"**, **right click** → **2x lock ON** |
+| ⎋ | **Esc** to turn off 2x lock |
+| 🔒 | While 2x lock is ON, any speed changes by YouTube are **overridden back to 2x** |
+| 🚫 | Suppresses unwanted **context menus** and accidental clicks |
 
 ---
 
-## Files
+## 🎮 How to Use
+
+On the YouTube video player:
+
+```
+  🖱️ Left + Right click     →  2x lock ON / OFF
+  ▶️ Hold Left → Right click →  2x lock ON
+  ⎋  Esc key                →  2x lock OFF
+```
+
+> [!TIP]
+> - YouTube's native "hold left click for temporary 2x" still works as usual
+> - If you want to **keep** 2x while holding, just **right click** — done
+> - You can also press both buttons simultaneously for a quick toggle
+
+---
+
+## 📦 Install
+
+> [!NOTE]
+> This extension is loaded via Chrome's Developer Mode (not published on the Chrome Web Store).
+
+**1.** Download or clone this repository
+
+```bash
+git clone https://github.com/P0KEBAN/youtube-quick-2x.git
+```
+
+**2.** Open `chrome://extensions/` in Chrome
+
+**3.** Enable **Developer mode** (toggle in the top-right corner)
+
+**4.** Click **"Load unpacked"**
+
+**5.** Select the `Chrome` folder (where `manifest.json` is located)
+
+> [!IMPORTANT]
+> Make sure to select the `Chrome/` folder, not the repository root.
+
+---
+
+## 📂 Files
 
 ```
 Chrome/
-├── manifest.json   # Chrome Extension (Manifest V3)
-└── content.js      # YouTube ページ上で動くスクリプト
+├── manifest.json    # Chrome Extension config (Manifest V3)
+├── content.js       # Main script running on YouTube pages
+└── icons/
+    ├── icon16.png   # Toolbar icon
+    ├── icon48.png   # Extensions page icon
+    └── icon128.png  # Chrome Web Store / detail page icon
 ```
 
 ---
 
-## Customization
+## ⚙️ Customization
 
-`content.js` 冒頭付近の定数を変えるだけで調整できます。
+Adjust the constants at the top of `content.js`:
 
-| 定数 | 説明 | デフォルト |
-|------|------|-----------|
-| `TARGET_RATE` | 固定したい倍率 | `2` |
-| `CHORD_WINDOW_MS` | 同時押し判定の猶予（ms）。`null` にすると制限なし | `250` |
-| `SUPPRESS_MS` | トグル直後の contextmenu / クリック誤爆を抑止する時間（ms） | `1200` |
-
----
-
-## Notes / Limitations
-
-- この拡張は **PC の Chrome（YouTube Web版）** 向けです  
-  - スマホの YouTube アプリや、モバイル Chrome では拡張が動かないため非対応
-- トラックパッドの「右クリック = 2本指タップ」だと、左押し中に操作しにくい場合があります  
-  - その場合は `CHORD_WINDOW_MS` を広げるか、外付けマウスの使用を推奨
+| Constant | Description | Default |
+|:--|:--|:--:|
+| `TARGET_RATE` | Target playback rate to lock | `2` |
+| `CHORD_WINDOW_MS` | Time window for chord detection (ms). Set to `null` for no limit | `250` |
+| `SUPPRESS_MS` | Duration to suppress context menu / accidental clicks after toggle (ms) | `1200` |
 
 ---
 
-## Development
+## ⚠️ Notes / Limitations
 
-変更後は `chrome://extensions/` からこの拡張の **更新（Reload）** を押してください。
+> [!WARNING]
+> This extension is designed for **Chrome on desktop (YouTube Web)** only.
+> It does not work on the YouTube mobile app or mobile Chrome, as extensions are not supported there.
+
+- Trackpad "right click = two-finger tap" can be tricky while holding the left button
+  - → Increase `CHORD_WINDOW_MS` or use an **external mouse**
 
 ---
 
-## License
+## 🛠️ Development
 
-MIT License
+After making changes, click the **Reload** button on your extension card in `chrome://extensions/`.
+
+```
+chrome://extensions/ → 🔄 Reload button on the extension card
+```
+
+---
+
+## 📄 License
+
+[MIT License](LICENSE) © 2025 pokeban

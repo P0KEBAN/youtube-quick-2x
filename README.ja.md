@@ -11,7 +11,7 @@
 [![Chrome Extension](https://img.shields.io/badge/Platform-Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.3.0-EA4335?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.4.0-EA4335?style=flat-square)]()
 
 **🇬🇧 [English README](README.md)**
 
@@ -36,6 +36,7 @@
 | ▶️ | YouTube 標準の「**左長押しで2x**」中に **右クリック** → 指を離しても **2x をキープ** |
 | 🔘 | プレイヤーのコントロール（字幕・設定の並び）にある **2x ボタン** → **2x ON/OFF** |
 | ⎋ | **Esc** で 2x を解除（OFF） |
+| ⏭️ | **別の動画に移る**と 2x は解除され、元の速度に戻ります |
 | 🔁 | 2x ON 中は、YouTube 側の速度変更が入っても **2x に戻します** |
 | 🚫 | 余計な **右クリックメニュー（context menu）** や誤クリック、**意図しない全画面化**を抑止 |
 
@@ -106,6 +107,7 @@ Chrome/
 |:--|:--|:--:|
 | `TARGET_RATE` | 切り替え先の倍率 | `2` |
 | `CHORD_WINDOW_MS` | 同時押し判定の猶予（ms）。`null` で制限なし | `250` |
+| `RESET_ON_VIDEO_CHANGE` | 別の動画に移ったら 2x を解除する。`false` で次の動画にも引き継ぐ | `true` |
 | `SUPPRESS_MS` | トグル直後の contextmenu / クリック誤爆を抑止する時間（ms） | `1200` |
 
 ---

@@ -11,7 +11,7 @@ Mouse-only control — toggle with **Left Click + Right Click** on the video pla
 [![Chrome Extension](https://img.shields.io/badge/Platform-Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.3.0-EA4335?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.4.0-EA4335?style=flat-square)]()
 
 **🇯🇵 [日本語版 README はこちら](README.ja.md)**
 
@@ -36,6 +36,7 @@ Mouse-only control — toggle with **Left Click + Right Click** on the video pla
 | ▶️ | During YouTube's native **"hold left to 2x"**, **right click** → **stays at 2x** after you let go |
 | 🔘 | **2x button** in the player controls (next to subtitles / settings) → **2x ON/OFF** |
 | ⎋ | **Esc** to turn 2x off |
+| ⏭️ | Moving to **another video** turns 2x off and restores your previous speed |
 | 🔁 | While 2x is ON, any speed changes by YouTube are **overridden back to 2x** |
 | 🚫 | Suppresses unwanted **context menus**, accidental clicks and **accidental fullscreen** |
 
@@ -106,6 +107,7 @@ Adjust the constants at the top of `content.js`:
 |:--|:--|:--:|
 | `TARGET_RATE` | Playback rate to switch to | `2` |
 | `CHORD_WINDOW_MS` | Time window for chord detection (ms). Set to `null` for no limit | `250` |
+| `RESET_ON_VIDEO_CHANGE` | Turn 2x off when you move to another video. Set to `false` to carry 2x over | `true` |
 | `SUPPRESS_MS` | Duration to suppress context menu / accidental clicks after toggle (ms) | `1200` |
 
 ---

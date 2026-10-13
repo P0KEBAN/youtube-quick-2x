@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "YouTube Quick 2x",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Toggle YouTube 2x speed by pressing Left+Right click together (Chord) or with the 2x button in the player. Esc to turn off.",
     "host_permissions": [
         "*://*.youtube.com/*",

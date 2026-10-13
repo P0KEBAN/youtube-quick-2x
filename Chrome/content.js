@@ -8,6 +8,10 @@
     // 同時押しトグル時に出がちな contextmenu / 余計なクリックを潰す猶予
     const SUPPRESS_MS = 1200;
 
+    // 別の動画に移ったら 2x を解除して元の速度に戻す。
+    // ここを false にすると、次の動画にも 2x を引き継ぎます。
+    const RESET_ON_VIDEO_CHANGE = true;
+
     // プレイヤーのコントロールバーに置く 2x ボタンの id
     const BUTTON_ID = "__yt_sticky2x_button";
     const TOOLTIP_ID = "__yt_sticky2x_tooltip";
@@ -15,6 +19,9 @@
     const state = {
         stickyOn: false,
         previousRate: 1,
+
+        // 2x を ON にした時の動画ID（別の動画に移ったかの判定用）
+        stickyVideoId: null,
 
         suppressUntil: 0,
 
@@ -247,6 +254,35 @@
         }
     }
 
+    function getVideoId() {
+        const url = new URL(location.href);
+        const id = url.searchParams.get("v");
+        if (id) return id;
+        const m = url.pathname.match(/^\/(?:shorts|embed|live)\/([^/?]+)/);
+        return m ? m[1] : null;
+    }
+
+    // ON にした動画から別の動画へ移っていたら、2x を解除して元の速度に戻す。
+    // 広告は動画IDが変わらないので解除されない。
+    function resetIfVideoChanged() {
+        if (!RESET_ON_VIDEO_CHANGE || !state.stickyOn) return;
+
+        // ミニプレイヤーなど、URLから動画IDが取れない場面では判断しない
+        const id = getVideoId();
+        if (id == null) return;
+        if (state.stickyVideoId == null) {
+            state.stickyVideoId = id;
+            return;
+        }
+        if (id === state.stickyVideoId) return;
+
+        state.stickyOn = false;
+        state.pendingRestore = false;
+        const v = getVideo();
+        if (v) setPlaybackRateSafe(v, state.previousRate || 1);
+        updateButton();
+    }
+
     function setPlaybackRateSafe(v, rate) {
         if (!v) return false;
         state.settingRate = true;
@@ -259,6 +295,7 @@
     }
 
     function applyStickyIfNeeded() {
+        resetIfVideoChanged();
         if (!state.stickyOn) return;
         refreshVideo();
         const v = state.video;
@@ -276,6 +313,7 @@
         const v = state.video;
         if (!v) return;
 
+        resetIfVideoChanged();
         if (state.stickyOn) {
             if (Math.abs((v.playbackRate || 0) - TARGET_RATE) > 0.0001) {
                 setPlaybackRateSafe(v, TARGET_RATE);
@@ -321,6 +359,7 @@
 
             state.previousRate = base;
             state.stickyOn = true;
+            state.stickyVideoId = getVideoId();
 
             state.pendingRestore = false;
             const ok = setPlaybackRateSafe(v, TARGET_RATE);

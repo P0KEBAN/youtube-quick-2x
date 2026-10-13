@@ -108,9 +108,9 @@ Adjust the constants at the top of `content.js`:
 | Constant | Description | Default |
 |:--|:--|:--:|
 | `TARGET_RATE` | Playback rate to switch to | `2` |
-| `CHORD_WINDOW_MS` | Time window for chord detection (ms). Set to `null` for no limit | `250` |
+| `CHORD_WINDOW_MS` | Right→Left chord window (ms). Set to `null` for no limit. Left→Right has no time limit | `250` |
 | `RESET_ON_VIDEO_CHANGE` | Turn 2x off when you move to another video. Set to `false` to carry 2x over | `true` |
-| `SUPPRESS_MS` | Duration to suppress context menu / accidental clicks after toggle (ms) | `1200` |
+| `SUPPRESS_MS` | Grace period after releasing a chord to suppress trailing events (ms). Controls and new independent clicks pass through | `1200` |
 
 ---
 
@@ -127,7 +127,10 @@ Adjust the constants at the top of `content.js`:
 
 ## 🛠️ Development
 
+Run `node --test tests/content.test.cjs` with Node.js for DOM-mock regression tests. No additional packages are needed. See the [verification record](docs/verification.md) for checks that require real Chrome and YouTube interactions.
+
 After making changes, click the **Reload** button on your extension card in `chrome://extensions/`.
+Reload open YouTube tabs as well to apply the updated script.
 
 ```
 chrome://extensions/ → 🔄 Reload button on the extension card

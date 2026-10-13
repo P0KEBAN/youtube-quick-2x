@@ -15,6 +15,10 @@
         "message": "2x ON（左+右 同時押しでOFF / Escでも解除）",
         "description": "Toast shown when 2x is turned ON. Visible for under a second, so keep it short."
     },
+    "toastOff": {
+        "message": "2x OFF",
+        "description": "Toast shown when fixed 2x is turned OFF."
+    },
     "toastNoVideo": {
         "message": "動画が見つからないので切替できません",
         "description": "Toast shown when no video element is found on the page."

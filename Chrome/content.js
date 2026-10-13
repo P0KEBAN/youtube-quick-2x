@@ -1,8 +1,8 @@
 (() => {
     const TARGET_RATE = 2;
 
-    // 「同時押し」の猶予。250ms以内なら同時押し扱い。
-    // ここを null にすると「左を押しながら右」みたいな遅い押し方でも発動します。
+    // 右→左の「同時押し」の猶予。左→右は長押しからの固定用に時間制限なし。
+    // null にすると右→左も時間制限なしで発動します。
     const CHORD_WINDOW_MS = 250;
 
     // 同時押しトグル時に出がちな contextmenu / 余計なクリックを潰す猶予
@@ -22,6 +22,7 @@
         buttonLabelOff: chrome.i18n.getMessage("buttonLabelOff"),
         buttonLabelOn: chrome.i18n.getMessage("buttonLabelOn"),
         toastOn: chrome.i18n.getMessage("toastOn"),
+        toastOff: chrome.i18n.getMessage("toastOff"),
         toastNoVideo: chrome.i18n.getMessage("toastNoVideo"),
         toastRateUnavailable: chrome.i18n.getMessage("toastRateUnavailable")
     };
@@ -64,7 +65,7 @@
     }
 
     function shouldSuppressUIEvents() {
-        return now() < state.suppressUntil;
+        return state.chordConsumed || now() < state.suppressUntil;
     }
 
     function armSuppressUIEvents() {
@@ -76,7 +77,8 @@
     }
 
     function getVideo() {
-        return document.querySelector("video.html5-main-video") || document.querySelector("video") || null;
+        const player = getPlayer();
+        return player?.querySelector("video.html5-main-video") || player?.querySelector("video") || null;
     }
 
     function toast(text) {
@@ -252,16 +254,13 @@
             state.video = v;
             bindVideo(v);
 
-            // Reset sticky per video change
-            if (state.stickyOn) {
-                state.stickyOn = false;
-                updateButton();
-            }
-            state.previousRate = v.playbackRate || 1;
             resetPressState();
         } else if (!v) {
             state.video = null;
+            resetPressState();
         }
+        // 要素の再生成では固定状態・元の速度を変えない。解除の判断は動画IDに集約する。
+        resetIfVideoChanged();
     }
 
     function getVideoId() {
@@ -275,7 +274,8 @@
     // ON にした動画から別の動画へ移っていたら、2x を解除して元の速度に戻す。
     // 広告は動画IDが変わらないので解除されない。
     function resetIfVideoChanged() {
-        if (!RESET_ON_VIDEO_CHANGE || !state.stickyOn) return;
+        // 切替途中で要素がない場合は、復元先が現れるまで解除を保留する。
+        if (!RESET_ON_VIDEO_CHANGE || !state.stickyOn || !state.video) return;
 
         // ミニプレイヤーなど、URLから動画IDが取れない場面では判断しない
         const id = getVideoId();
@@ -287,9 +287,8 @@
         if (id === state.stickyVideoId) return;
 
         state.stickyOn = false;
-        state.pendingRestore = false;
-        const v = getVideo();
-        if (v) setPlaybackRateSafe(v, state.previousRate || 1);
+        resetPressState();
+        if (state.video) setPlaybackRateSafe(state.video, state.previousRate || 1);
         updateButton();
     }
 
@@ -298,21 +297,26 @@
         state.settingRate = true;
         try {
             v.playbackRate = rate;
+            return Math.abs((v.playbackRate || 0) - rate) < 0.0001;
+        } catch {
+            return false;
         } finally {
             state.settingRate = false;
         }
-        return Math.abs((v.playbackRate || 0) - rate) < 0.0001;
     }
 
     function applyStickyIfNeeded() {
-        resetIfVideoChanged();
-        if (!state.stickyOn) return;
         refreshVideo();
+        if (!state.stickyOn) return;
         const v = state.video;
         if (!v) return;
 
         if (Math.abs((v.playbackRate || 0) - TARGET_RATE) > 0.0001) {
-            setPlaybackRateSafe(v, TARGET_RATE);
+            if (!setPlaybackRateSafe(v, TARGET_RATE)) {
+                state.stickyOn = false;
+                updateButton();
+                toast(MSG.toastRateUnavailable);
+            }
         }
     }
 
@@ -323,11 +327,8 @@
         const v = state.video;
         if (!v) return;
 
-        resetIfVideoChanged();
         if (state.stickyOn) {
-            if (Math.abs((v.playbackRate || 0) - TARGET_RATE) > 0.0001) {
-                setPlaybackRateSafe(v, TARGET_RATE);
-            }
+            applyStickyIfNeeded();
             return;
         }
 
@@ -340,12 +341,6 @@
                 }
             }
         }
-    }
-
-    function isChordPressed() {
-        if (!(state.leftDown && state.rightDown)) return false;
-        if (CHORD_WINDOW_MS == null) return true;
-        return Math.abs(state.leftDownAt - state.rightDownAt) <= CHORD_WINDOW_MS;
     }
 
     function captureRateBeforePressIfNeeded() {
@@ -375,6 +370,7 @@
             const ok = setPlaybackRateSafe(v, TARGET_RATE);
             if (!ok) {
                 state.stickyOn = false;
+                updateButton();
                 toast(MSG.toastRateUnavailable);
                 return false;
             }
@@ -394,12 +390,17 @@
             }
 
             updateButton();
-            toast("2x OFF");
+            toast(MSG.toastOff);
             return true;
         }
     }
 
     function onMouseDownCapture(e) {
+        refreshVideo();
+        // 新しい単独クリックは通す。連続クリックはMacの全画面誤爆対策として抑止を維持。
+        if (!state.leftDown && !state.rightDown && (e.detail <= 1 || isPlayerControl(e.target))) {
+            state.suppressUntil = 0;
+        }
         if (e.button === 0) {
             state.leftDown = true;
             state.leftDownAt = now();
@@ -432,6 +433,8 @@
     }
 
     function onMouseUpCapture(e) {
+        if (e.button !== 0 && e.button !== 2) return;
+        if (state.chordConsumed) armSuppressUIEvents();
         if (e.button === 0) state.leftDown = false;
         if (e.button === 2) state.rightDown = false;
 
@@ -468,7 +471,19 @@
         }
     }
 
+    function onWindowBlur(e) {
+        if (e.target !== window) return;
+        // ウィンドウ外で解放される場合はmouseupが来ない。保留中の速度復元も完了させる。
+        onMouseUpCapture({ button: 0 });
+        onMouseUpCapture({ button: 2 });
+    }
+
+    function isPlayerControl(target) {
+        return Boolean(target?.closest?.(".ytp-chrome-controls, .ytp-popup, button, input, select, textarea, [role='button'], [role='menuitem']"));
+    }
+
     function onClickCapture(e) {
+        if (isPlayerControl(e.target)) return;
         if (!shouldSuppressUIEvents()) return;
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -481,9 +496,12 @@
     }
 
     function onKeyDown(e) {
+        if (e.isComposing || e.keyCode === 229 || e.target?.isContentEditable ||
+            e.target?.closest?.("input, textarea, select, [contenteditable]:not([contenteditable='false'])")) return;
         if (e.key === "Escape" && state.stickyOn) {
-            e.preventDefault();
+            // 検索候補・メニュー・全画面の終了にも同じEscapeを渡す。
             refreshVideo();
+            if (!state.stickyOn) return;
             const v = state.video;
             state.stickyOn = false;
             if (state.leftDown || state.rightDown) {
@@ -493,7 +511,7 @@
                 if (v) setPlaybackRateSafe(v, state.previousRate || 1);
             }
             updateButton();
-            toast("2x OFF");
+            toast(MSG.toastOff);
         }
     }
 
@@ -502,7 +520,6 @@
         attachedPlayers.add(player);
 
         player.addEventListener("mousedown", onMouseDownCapture, { capture: true, passive: true });
-        player.addEventListener("mouseup", onMouseUpCapture, { capture: true, passive: true });
         player.addEventListener("click", onClickCapture, { capture: true });
         // 同時押しがダブルクリック扱いになると YouTube が全画面にしてしまう（Macで発生）
         player.addEventListener("dblclick", onClickCapture, { capture: true });
@@ -537,6 +554,8 @@
         state.globalAttached = true;
 
         document.addEventListener("keydown", onKeyDown, true);
+        window.addEventListener("mouseup", onMouseUpCapture, { capture: true, passive: true });
+        window.addEventListener("blur", onWindowBlur, true);
         document.addEventListener("yt-navigate-finish", () => setTimeout(ensureAttached, 0), true);
         window.addEventListener("popstate", () => setTimeout(ensureAttached, 0), true);
     }

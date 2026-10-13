@@ -108,9 +108,9 @@ Chrome/
 | 定数 | 説明 | デフォルト |
 |:--|:--|:--:|
 | `TARGET_RATE` | 切り替え先の倍率 | `2` |
-| `CHORD_WINDOW_MS` | 同時押し判定の猶予（ms）。`null` で制限なし | `250` |
+| `CHORD_WINDOW_MS` | 右→左の同時押し判定の猶予（ms）。`null` で制限なし。左→右は常に時間制限なし | `250` |
 | `RESET_ON_VIDEO_CHANGE` | 別の動画に移ったら 2x を解除する。`false` で次の動画にも引き継ぐ | `true` |
-| `SUPPRESS_MS` | トグル直後の contextmenu / クリック誤爆を抑止する時間（ms） | `1200` |
+| `SUPPRESS_MS` | 同時押しの解放後に後続イベントを抑止する猶予（ms）。操作ボタンと次の独立したクリックは通す | `1200` |
 
 ---
 
@@ -127,7 +127,10 @@ Chrome/
 
 ## 🛠️ Development
 
+Node.js で `node --test tests/content.test.cjs` を実行すると、DOMモックによる状態管理の回帰テストを実行できます。追加パッケージは不要です。実際のChrome・YouTubeでの操作確認は [検証記録](docs/verification.md) を参照してください。
+
 変更後は `chrome://extensions/` からこの拡張の **更新（Reload）** ボタンを押してください。
+開いているYouTubeのタブも再読み込みすると、変更したスクリプトが適用されます。
 
 ```
 chrome://extensions/ → 拡張カードの 🔄 ボタン

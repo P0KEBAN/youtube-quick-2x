@@ -15,6 +15,10 @@
         "message": "2x ON (Left+Right click or Esc to turn off)",
         "description": "Toast shown when 2x is turned ON. Visible for under a second, so keep it short."
     },
+    "toastOff": {
+        "message": "2x OFF",
+        "description": "Toast shown when fixed 2x is turned OFF."
+    },
     "toastNoVideo": {
         "message": "No video found, so 2x can't be toggled",
         "description": "Toast shown when no video element is found on the page."

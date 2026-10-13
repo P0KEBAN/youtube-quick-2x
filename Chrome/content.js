@@ -101,7 +101,7 @@
         const label = btn.firstElementChild;
 
         btn.setAttribute("aria-pressed", on ? "true" : "false");
-        btn.setAttribute("aria-label", on ? "2x 固定を解除" : "2x 固定");
+        btn.setAttribute("aria-label", on ? "2倍速を解除" : "2倍速");
 
         // 表示中のツールチップがあれば文言も追従させる
         const tip = document.getElementById(TOOLTIP_ID);
@@ -331,7 +331,7 @@
             }
 
             updateButton();
-            toast("2x 固定 ON（左+右 同時押しでOFF / Escでも解除）");
+            toast("2x ON（左+右 同時押しでOFF / Escでも解除）");
             return true;
         } else {
             state.stickyOn = false;
@@ -345,7 +345,7 @@
             }
 
             updateButton();
-            toast("2x 固定 OFF");
+            toast("2x OFF");
             return true;
         }
     }
@@ -444,7 +444,7 @@
                 if (v) setPlaybackRateSafe(v, state.previousRate || 1);
             }
             updateButton();
-            toast("2x \u56fa\u5b9a OFF");
+            toast("2x OFF");
         }
     }
 

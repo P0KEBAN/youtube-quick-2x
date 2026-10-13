@@ -4,7 +4,7 @@
 
 # YouTube Quick 2x
 
-**A dead-simple Chrome extension that locks YouTube playback speed to 2x (ON/OFF toggle)**
+**A dead-simple Chrome extension that flips YouTube to 2x speed and back in an instant**
 
 Mouse-only control — toggle with **Left Click + Right Click** on the video player 🖱️
 
@@ -32,11 +32,11 @@ Mouse-only control — toggle with **Left Click + Right Click** on the video pla
 
 | | Description |
 |:--:|:--|
-| 🖱️ | **Left + Right click** on the video → **2x lock ON/OFF** |
-| ▶️ | During YouTube's native **"hold left to 2x"**, **right click** → **2x lock ON** |
-| 🔘 | **2x button** in the player controls (next to subtitles / settings) → **2x lock ON/OFF** |
-| ⎋ | **Esc** to turn off 2x lock |
-| 🔒 | While 2x lock is ON, any speed changes by YouTube are **overridden back to 2x** |
+| 🖱️ | **Left + Right click** on the video → **2x ON/OFF** |
+| ▶️ | During YouTube's native **"hold left to 2x"**, **right click** → **stays at 2x** after you let go |
+| 🔘 | **2x button** in the player controls (next to subtitles / settings) → **2x ON/OFF** |
+| ⎋ | **Esc** to turn 2x off |
+| 🔁 | While 2x is ON, any speed changes by YouTube are **overridden back to 2x** |
 | 🚫 | Suppresses unwanted **context menus**, accidental clicks and **accidental fullscreen** |
 
 ---
@@ -46,17 +46,17 @@ Mouse-only control — toggle with **Left Click + Right Click** on the video pla
 On the YouTube video player:
 
 ```
-  🖱️ Left + Right click     →  2x lock ON / OFF
-  ▶️ Hold Left → Right click →  2x lock ON
-  🔘 2x button in controls   →  2x lock ON / OFF
-  ⎋  Esc key                →  2x lock OFF
+  🖱️ Left + Right click     →  2x ON / OFF
+  ▶️ Hold Left → Right click →  stays at 2x
+  🔘 2x button in controls   →  2x ON / OFF
+  ⎋  Esc key                →  2x OFF
 ```
 
 > [!TIP]
 > - YouTube's native "hold left click for temporary 2x" still works as usual
 > - If you want to **keep** 2x while holding, just **right click** — done
 > - You can also press both buttons simultaneously for a quick toggle
-> - The **2x button** lights up while 2x lock is ON, so it also works as an indicator
+> - The **2x button** lights up while 2x is ON, so it also works as an indicator
 
 ---
 
@@ -104,7 +104,7 @@ Adjust the constants at the top of `content.js`:
 
 | Constant | Description | Default |
 |:--|:--|:--:|
-| `TARGET_RATE` | Target playback rate to lock | `2` |
+| `TARGET_RATE` | Playback rate to switch to | `2` |
 | `CHORD_WINDOW_MS` | Time window for chord detection (ms). Set to `null` for no limit | `250` |
 | `SUPPRESS_MS` | Duration to suppress context menu / accidental clicks after toggle (ms) | `1200` |
 

@@ -1,0 +1,26 @@
+{
+    "extDescription": {
+        "message": "左クリック+右クリックの同時押し、またはプレイヤーの2xボタンで、YouTubeの2倍速をON/OFFできます。",
+        "description": "Extension description shown on the extensions page."
+    },
+    "buttonLabelOff": {
+        "message": "2倍速",
+        "description": "Tooltip / aria-label of the 2x button while 2x is OFF."
+    },
+    "buttonLabelOn": {
+        "message": "2倍速を解除",
+        "description": "Tooltip / aria-label of the 2x button while 2x is ON."
+    },
+    "toastOn": {
+        "message": "2x ON（左+右 同時押しでOFF / Escでも解除）",
+        "description": "Toast shown when 2x is turned ON. Visible for under a second, so keep it short."
+    },
+    "toastNoVideo": {
+        "message": "動画が見つからないので切替できません",
+        "description": "Toast shown when no video element is found on the page."
+    },
+    "toastRateUnavailable": {
+        "message": "この動画では速度変更できません",
+        "description": "Toast shown when the playback rate of the video cannot be changed."
+    }
+}

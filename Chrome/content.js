@@ -16,6 +16,16 @@
     const BUTTON_ID = "__yt_sticky2x_button";
     const TOOLTIP_ID = "__yt_sticky2x_tooltip";
 
+    // 画面に出す文言。Chrome の表示言語に合わせて _locales/ から選ばれる（日本語・英語以外は英語）。
+    // 拡張を再読み込みした後の古いタブでは chrome.i18n が使えなくなるので、起動時にまとめて取っておく。
+    const MSG = {
+        buttonLabelOff: chrome.i18n.getMessage("buttonLabelOff"),
+        buttonLabelOn: chrome.i18n.getMessage("buttonLabelOn"),
+        toastOn: chrome.i18n.getMessage("toastOn"),
+        toastNoVideo: chrome.i18n.getMessage("toastNoVideo"),
+        toastRateUnavailable: chrome.i18n.getMessage("toastRateUnavailable")
+    };
+
     const state = {
         stickyOn: false,
         previousRate: 1,
@@ -108,7 +118,7 @@
         const label = btn.firstElementChild;
 
         btn.setAttribute("aria-pressed", on ? "true" : "false");
-        btn.setAttribute("aria-label", on ? "2倍速を解除" : "2倍速");
+        btn.setAttribute("aria-label", on ? MSG.buttonLabelOn : MSG.buttonLabelOff);
 
         // 表示中のツールチップがあれば文言も追従させる
         const tip = document.getElementById(TOOLTIP_ID);
@@ -349,7 +359,7 @@
         const v = state.video;
 
         if (!v) {
-            toast("動画が見つからないので切替できません");
+            toast(MSG.toastNoVideo);
             return false;
         }
 
@@ -365,12 +375,12 @@
             const ok = setPlaybackRateSafe(v, TARGET_RATE);
             if (!ok) {
                 state.stickyOn = false;
-                toast("この動画では速度変更できません");
+                toast(MSG.toastRateUnavailable);
                 return false;
             }
 
             updateButton();
-            toast("2x ON（左+右 同時押しでOFF / Escでも解除）");
+            toast(MSG.toastOn);
             return true;
         } else {
             state.stickyOn = false;

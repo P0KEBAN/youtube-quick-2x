@@ -91,6 +91,7 @@ git clone https://github.com/P0KEBAN/youtube-quick-2x.git
 Chrome/
 ├── manifest.json    # Chrome Extension 設定 (Manifest V3)
 ├── content.js       # YouTube ページ上で動くメインスクリプト
+├── _locales/        # 表示文言（en: 英語 / ja: 日本語）
 └── icons/
     ├── icon16.png   # ツールバー用アイコン
     ├── icon48.png   # 拡張機能ページ用

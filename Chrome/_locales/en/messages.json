@@ -1,0 +1,26 @@
+{
+    "extDescription": {
+        "message": "Toggle YouTube 2x speed by pressing Left+Right click together (Chord) or with the 2x button in the player.",
+        "description": "Extension description shown on the extensions page."
+    },
+    "buttonLabelOff": {
+        "message": "2x speed",
+        "description": "Tooltip / aria-label of the 2x button while 2x is OFF."
+    },
+    "buttonLabelOn": {
+        "message": "Turn off 2x speed",
+        "description": "Tooltip / aria-label of the 2x button while 2x is ON."
+    },
+    "toastOn": {
+        "message": "2x ON (Left+Right click or Esc to turn off)",
+        "description": "Toast shown when 2x is turned ON. Visible for under a second, so keep it short."
+    },
+    "toastNoVideo": {
+        "message": "No video found, so 2x can't be toggled",
+        "description": "Toast shown when no video element is found on the page."
+    },
+    "toastRateUnavailable": {
+        "message": "Can't change the speed on this video",
+        "description": "Toast shown when the playback rate of the video cannot be changed."
+    }
+}

@@ -11,7 +11,7 @@ Mouse-only control — toggle with **Left Click + Right Click** on the video pla
 [![Chrome Extension](https://img.shields.io/badge/Platform-Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.2.0-EA4335?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.3.0-EA4335?style=flat-square)]()
 
 **🇯🇵 [日本語版 README はこちら](README.ja.md)**
 
@@ -34,9 +34,10 @@ Mouse-only control — toggle with **Left Click + Right Click** on the video pla
 |:--:|:--|
 | 🖱️ | **Left + Right click** on the video → **2x lock ON/OFF** |
 | ▶️ | During YouTube's native **"hold left to 2x"**, **right click** → **2x lock ON** |
+| 🔘 | **2x button** in the player controls (next to subtitles / settings) → **2x lock ON/OFF** |
 | ⎋ | **Esc** to turn off 2x lock |
 | 🔒 | While 2x lock is ON, any speed changes by YouTube are **overridden back to 2x** |
-| 🚫 | Suppresses unwanted **context menus** and accidental clicks |
+| 🚫 | Suppresses unwanted **context menus**, accidental clicks and **accidental fullscreen** |
 
 ---
 
@@ -47,6 +48,7 @@ On the YouTube video player:
 ```
   🖱️ Left + Right click     →  2x lock ON / OFF
   ▶️ Hold Left → Right click →  2x lock ON
+  🔘 2x button in controls   →  2x lock ON / OFF
   ⎋  Esc key                →  2x lock OFF
 ```
 
@@ -54,6 +56,7 @@ On the YouTube video player:
 > - YouTube's native "hold left click for temporary 2x" still works as usual
 > - If you want to **keep** 2x while holding, just **right click** — done
 > - You can also press both buttons simultaneously for a quick toggle
+> - The **2x button** lights up while 2x lock is ON, so it also works as an indicator
 
 ---
 

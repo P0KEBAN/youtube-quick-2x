@@ -8,6 +8,9 @@
     // 同時押しトグル時に出がちな contextmenu / 余計なクリックを潰す猶予
     const SUPPRESS_MS = 1200;
 
+    // プレイヤーのコントロールバーに置く 2x ボタンの id
+    const BUTTON_ID = "__yt_sticky2x_button";
+
     const state = {
         stickyOn: false,
         previousRate: 1,
@@ -90,6 +93,71 @@
         }, 900);
     }
 
+    function updateButton() {
+        const btn = document.getElementById(BUTTON_ID);
+        if (!btn) return;
+        const on = state.stickyOn;
+        const label = btn.firstElementChild;
+
+        btn.setAttribute("aria-pressed", on ? "true" : "false");
+        btn.title = on ? "2x 固定を解除" : "2x 固定";
+        btn.setAttribute("aria-label", btn.title);
+        if (label) {
+            label.style.background = on ? "#fff" : "transparent";
+            label.style.color = on ? "#0f0f0f" : "#fff";
+        }
+    }
+
+    function onButtonClick(e) {
+        // プレイヤー側に伝えない（再生/一時停止や全画面の誤爆を防ぐ）
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "click") toggleSticky();
+    }
+
+    function ensureButton(player) {
+        if (!player) return;
+        const existing = document.getElementById(BUTTON_ID);
+        if (existing && player.contains(existing)) return;
+        if (existing) existing.remove();
+
+        // 字幕・設定ボタンが並ぶエリア。YouTube側の構造が変わって見つからない時は何もしない
+        const container = player.querySelector(".ytp-right-controls-left") || player.querySelector(".ytp-right-controls");
+        if (!container) return;
+
+        const btn = document.createElement("button");
+        btn.id = BUTTON_ID;
+        btn.className = "ytp-button";
+        btn.type = "button";
+        btn.style.display = "inline-flex";
+        btn.style.alignItems = "center";
+        btn.style.justifyContent = "center";
+
+        const label = document.createElement("span");
+        label.textContent = "2x";
+        label.style.padding = "3px 6px";
+        label.style.border = "1.5px solid #fff";
+        label.style.borderRadius = "6px";
+        label.style.fontSize = "13px";
+        label.style.fontWeight = "700";
+        label.style.lineHeight = "1";
+        label.style.fontFamily = "system-ui, -apple-system, Segoe UI, Roboto, sans-serif";
+        label.style.pointerEvents = "none";
+        btn.appendChild(label);
+
+        btn.addEventListener("click", onButtonClick);
+        btn.addEventListener("dblclick", onButtonClick);
+
+        const anchor = container.querySelector(".ytp-subtitles-button") || container.querySelector(".ytp-settings-button");
+        if (anchor) {
+            anchor.parentNode.insertBefore(btn, anchor);
+        } else {
+            container.insertBefore(btn, container.firstChild);
+        }
+
+        updateButton();
+    }
+
     function bindVideo(v) {
         if (!v || v.__ytSticky2xBound) return;
         v.__ytSticky2xBound = true;
@@ -118,6 +186,7 @@
             // Reset sticky per video change
             if (state.stickyOn) {
                 state.stickyOn = false;
+                updateButton();
             }
             state.previousRate = v.playbackRate || 1;
             resetPressState();
@@ -209,6 +278,7 @@
                 return false;
             }
 
+            updateButton();
             toast("2x 固定 ON（左+右 同時押しでOFF / Escでも解除）");
             return true;
         } else {
@@ -222,6 +292,7 @@
                 state.pendingRestore = true;
             }
 
+            updateButton();
             toast("2x 固定 OFF");
             return true;
         }
@@ -320,6 +391,7 @@
                 state.pendingRestore = false;
                 if (v) setPlaybackRateSafe(v, state.previousRate || 1);
             }
+            updateButton();
             toast("2x \u56fa\u5b9a OFF");
         }
     }
@@ -331,6 +403,8 @@
         player.addEventListener("mousedown", onMouseDownCapture, { capture: true, passive: true });
         player.addEventListener("mouseup", onMouseUpCapture, { capture: true, passive: true });
         player.addEventListener("click", onClickCapture, { capture: true });
+        // 同時押しがダブルクリック扱いになると YouTube が全画面にしてしまう（Macで発生）
+        player.addEventListener("dblclick", onClickCapture, { capture: true });
         player.addEventListener("contextmenu", onContextMenuCapture, { capture: true });
 
         if (state.playerObserver) state.playerObserver.disconnect();
@@ -340,6 +414,7 @@
                 state.refreshDebounce = null;
                 refreshVideo();
                 applyStickyIfNeeded();
+                ensureButton(player);
             }, 120);
         });
         state.playerObserver.observe(player, { childList: true, subtree: true });
@@ -353,6 +428,7 @@
         if (player) attachToPlayer(player);
         refreshVideo();
         applyStickyIfNeeded();
+        ensureButton(player);
     }
 
     function attachGlobalOnce() {

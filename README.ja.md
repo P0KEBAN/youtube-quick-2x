@@ -11,7 +11,7 @@
 [![Chrome Extension](https://img.shields.io/badge/Platform-Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.2.0-EA4335?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.3.0-EA4335?style=flat-square)]()
 
 **🇬🇧 [English README](README.md)**
 
@@ -34,9 +34,10 @@
 |:--:|:--|
 | 🖱️ | 動画上で **左+右 同時押し** → **2x 固定 ON/OFF** |
 | ▶️ | YouTube 標準の「**左長押しで2x**」中に **右クリック** → **2x 固定 ON** |
+| 🔘 | プレイヤーのコントロール（字幕・設定の並び）にある **2x ボタン** → **2x 固定 ON/OFF** |
 | ⎋ | **Esc** で 2x 固定を解除（OFF） |
 | 🔒 | 2x 固定 ON 中は、YouTube 側の速度変更が入っても **2x に戻します** |
-| 🚫 | 余計な **右クリックメニュー（context menu）** や誤クリックを抑止 |
+| 🚫 | 余計な **右クリックメニュー（context menu）** や誤クリック、**意図しない全画面化**を抑止 |
 
 ---
 
@@ -47,6 +48,7 @@ YouTube の動画プレイヤー上で：
 ```
   🖱️ 左+右 同時押し   →  2x 固定 ON / OFF
   ▶️ 左を長押し中 → 右  →  2x 固定 ON
+  🔘 2x ボタン         →  2x 固定 ON / OFF
   ⎋  Esc キー         →  2x 固定 OFF
 ```
 
@@ -54,6 +56,7 @@ YouTube の動画プレイヤー上で：
 > - YouTube標準の「左長押しで一時的に2倍速」機能はそのまま使えます
 > - 長押し中に「このまま2倍速を維持したい」と思ったら、**右クリックするだけでOK**
 > - 同時押しでも発動するので、素早く2倍速にしたい時は**両方同時に押せばOK**
+> - **2x ボタン**は固定 ON の間だけ白く点灯するので、今の状態の目印にもなります
 
 ---
 

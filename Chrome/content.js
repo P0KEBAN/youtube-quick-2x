@@ -10,6 +10,7 @@
 
     // プレイヤーのコントロールバーに置く 2x ボタンの id
     const BUTTON_ID = "__yt_sticky2x_button";
+    const TOOLTIP_ID = "__yt_sticky2x_tooltip";
 
     const state = {
         stickyOn: false,
@@ -100,12 +101,59 @@
         const label = btn.firstElementChild;
 
         btn.setAttribute("aria-pressed", on ? "true" : "false");
-        btn.title = on ? "2x 固定を解除" : "2x 固定";
-        btn.setAttribute("aria-label", btn.title);
+        btn.setAttribute("aria-label", on ? "2x 固定を解除" : "2x 固定");
+
+        // 表示中のツールチップがあれば文言も追従させる
+        const tip = document.getElementById(TOOLTIP_ID);
+        if (tip && tip.style.display !== "none") tip.textContent = btn.getAttribute("aria-label");
         if (label) {
             label.style.background = on ? "#fff" : "transparent";
             label.style.color = on ? "#0f0f0f" : "#fff";
         }
+    }
+
+    // YouTube 標準のツールチップ（ボタンの上に即時表示される半透明のラベル）に見た目を寄せたもの。
+    // 標準のものは YouTube 内部で登録されたボタンにしか出ないので自前で出す。
+    function showTooltip(e) {
+        const btn = e.currentTarget;
+        const player = btn.closest("#movie_player") || getPlayer();
+        if (!player) return;
+
+        let tip = document.getElementById(TOOLTIP_ID);
+        if (!tip || !player.contains(tip)) {
+            if (tip) tip.remove();
+            tip = document.createElement("div");
+            tip.id = TOOLTIP_ID;
+            tip.style.position = "absolute";
+            tip.style.zIndex = "1003";
+            tip.style.transform = "translate(-50%, -100%)";
+            tip.style.padding = "5px 9px";
+            tip.style.borderRadius = "8px";
+            tip.style.background = "rgba(0,0,0,0.3)";
+            tip.style.color = "#eee";
+            tip.style.fontSize = "12.98px";
+            tip.style.fontWeight = "500";
+            tip.style.lineHeight = "15px";
+            tip.style.fontFamily = '"YouTube Noto", Roboto, Arial, Helvetica, sans-serif';
+            tip.style.textShadow = "0 0 2px #000";
+            tip.style.whiteSpace = "nowrap";
+            tip.style.pointerEvents = "none";
+            player.appendChild(tip);
+        }
+
+        const b = btn.getBoundingClientRect();
+        const p = player.getBoundingClientRect();
+        tip.textContent = btn.getAttribute("aria-label");
+        tip.style.left = `${b.left - p.left + b.width / 2}px`;
+        tip.style.top = `${b.top - p.top - 22}px`;
+        tip.style.display = "block";
+    }
+
+    function hideTooltip(e) {
+        // クリック後に YouTube がフォーカスを外しても、カーソルが乗っている間は出したままにする
+        if (e.type === "blur" && e.currentTarget.matches(":hover")) return;
+        const tip = document.getElementById(TOOLTIP_ID);
+        if (tip) tip.style.display = "none";
     }
 
     function onButtonClick(e) {
@@ -135,8 +183,8 @@
 
         const label = document.createElement("span");
         label.textContent = "2x";
-        label.style.padding = "3px 6px";
-        label.style.border = "1.5px solid #fff";
+        label.style.padding = "2px 5px";
+        label.style.border = "2px solid #fff";
         label.style.borderRadius = "6px";
         label.style.fontSize = "13px";
         label.style.fontWeight = "700";
@@ -147,6 +195,10 @@
 
         btn.addEventListener("click", onButtonClick);
         btn.addEventListener("dblclick", onButtonClick);
+        btn.addEventListener("mouseenter", showTooltip);
+        btn.addEventListener("mouseleave", hideTooltip);
+        btn.addEventListener("focus", showTooltip);
+        btn.addEventListener("blur", hideTooltip);
 
         const anchor = container.querySelector(".ytp-subtitles-button") || container.querySelector(".ytp-settings-button");
         if (anchor) {

@@ -11,7 +11,7 @@
 [![Chrome Extension](https://img.shields.io/badge/Platform-Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.5.0-EA4335?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.5.0-EA4335?style=flat-square)](https://github.com/P0KEBAN/youtube-quick-2x/releases/latest)
 
 **日本語** | [English](README.en.md)
 
@@ -66,11 +66,7 @@ YouTube の動画プレイヤー上で：
 > [!NOTE]
 > Chrome の「デベロッパーモード」で読み込む方式です。
 
-**1.** このリポジトリをダウンロード or clone
-
-```bash
-git clone https://github.com/P0KEBAN/youtube-quick-2x.git
-```
+**1.** [**Releases（最新版）**](https://github.com/P0KEBAN/youtube-quick-2x/releases/latest) から `youtube-quick-2x-vX.X.X.zip` をダウンロードして解凍
 
 **2.** Chrome で `chrome://extensions/` を開く
 
@@ -78,10 +74,15 @@ git clone https://github.com/P0KEBAN/youtube-quick-2x.git
 
 **4.** **「パッケージ化されていない拡張機能を読み込む」** をクリック
 
-**5.** `Chrome` フォルダ（`manifest.json` がある場所）を選択
+**5.** 解凍してできた `youtube-quick-2x` フォルダ（`manifest.json` がある場所）を選択
 
 > [!IMPORTANT]
-> `Chrome/` フォルダを指定してください（リポジトリのルートではありません）
+> 解凍したフォルダは、読み込んだあとも**削除・移動しないでください**（Chrome はそのフォルダを直接読み込んで動かしています）。
+> 消えにくい場所（書類フォルダなど）に置いてから読み込むのがおすすめです。
+
+**アップデートするとき**：新しい zip を解凍し、同じ場所の `youtube-quick-2x` フォルダに上書きしてから、`chrome://extensions/` でこの拡張の **更新（🔄）** ボタンを押してください。
+
+> `git clone` で入手した場合は、手順 5 で `Chrome/` フォルダを選択してください（リポジトリのルートではありません）。
 
 ---
 

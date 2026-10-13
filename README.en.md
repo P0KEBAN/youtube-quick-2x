@@ -11,7 +11,7 @@ Mouse-only control — toggle with **Left Click + Right Click** on the video pla
 [![Chrome Extension](https://img.shields.io/badge/Platform-Chrome-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.5.0-EA4335?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.5.0-EA4335?style=flat-square)](https://github.com/P0KEBAN/youtube-quick-2x/releases/latest)
 
 [日本語](README.md) | **English**
 
@@ -66,11 +66,7 @@ On the YouTube video player:
 > [!NOTE]
 > This extension is loaded via Chrome's Developer Mode (not published on the Chrome Web Store).
 
-**1.** Download or clone this repository
-
-```bash
-git clone https://github.com/P0KEBAN/youtube-quick-2x.git
-```
+**1.** Download `youtube-quick-2x-vX.X.X.zip` from [**Releases (latest)**](https://github.com/P0KEBAN/youtube-quick-2x/releases/latest) and unzip it
 
 **2.** Open `chrome://extensions/` in Chrome
 
@@ -78,10 +74,15 @@ git clone https://github.com/P0KEBAN/youtube-quick-2x.git
 
 **4.** Click **"Load unpacked"**
 
-**5.** Select the `Chrome` folder (where `manifest.json` is located)
+**5.** Select the unzipped `youtube-quick-2x` folder (where `manifest.json` is located)
 
 > [!IMPORTANT]
-> Make sure to select the `Chrome/` folder, not the repository root.
+> **Do not delete or move** the unzipped folder after loading it — Chrome runs the extension directly from that folder.
+> Put it somewhere permanent (e.g. your Documents folder) before loading.
+
+**To update**: unzip the new zip over the same `youtube-quick-2x` folder, then press the **Reload (🔄)** button for this extension on `chrome://extensions/`.
+
+> If you got the source via `git clone`, select the `Chrome/` folder in step 5 (not the repository root).
 
 ---
 

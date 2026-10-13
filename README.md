@@ -127,7 +127,7 @@ Chrome/
 
 ## 🛠️ Development
 
-Node.js で `node --test tests/content.test.cjs` を実行すると、DOMモックによる状態管理の回帰テストを実行できます。追加パッケージは不要です。実際のChrome・YouTubeでの操作確認は [検証記録](docs/verification.md) を参照してください。
+Node.js で `node --test tests/content.test.cjs` を実行すると、DOMモックによる状態管理の回帰テストを実行できます。追加パッケージは不要です。実際のChrome・YouTubeでの操作確認は別途必要です。
 
 変更後は `chrome://extensions/` からこの拡張の **更新（Reload）** ボタンを押してください。
 開いているYouTubeのタブも再読み込みすると、変更したスクリプトが適用されます。

@@ -127,7 +127,7 @@ Adjust the constants at the top of `content.js`:
 
 ## 🛠️ Development
 
-Run `node --test tests/content.test.cjs` with Node.js for DOM-mock regression tests. No additional packages are needed. See the [verification record](docs/verification.md) for checks that require real Chrome and YouTube interactions.
+Run `node --test tests/content.test.cjs` with Node.js for DOM-mock regression tests. No additional packages are needed. Real Chrome and YouTube interactions require separate manual verification.
 
 After making changes, click the **Reload** button on your extension card in `chrome://extensions/`.
 Reload open YouTube tabs as well to apply the updated script.

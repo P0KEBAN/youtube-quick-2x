@@ -13,7 +13,7 @@ Mouse-only control — toggle with **Left Click + Right Click** on the video pla
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-0.4.0-EA4335?style=flat-square)]()
 
-**🇯🇵 [日本語版 README はこちら](README.md)**
+[日本語](README.md) | **English**
 
 </div>
 

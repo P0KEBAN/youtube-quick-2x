@@ -13,7 +13,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-F5C518?style=flat-square)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-0.4.0-EA4335?style=flat-square)]()
 
-**🇬🇧 [English README](README.en.md)**
+**日本語** | [English](README.en.md)
 
 </div>
 
